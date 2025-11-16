@@ -35,3 +35,10 @@ func DeleteContainer(containerId string) error {
 	return nil
 }
 
+func RunQuery(containerId, query string) (string, error) {
+	cmd := exec.Command("docker", "exec", "-i", containerId,
+		"mysql", "-uroot", "-psecret", "-e", query)
+
+	out, err := cmd.CombinedOutput()
+	return string(out), err
+}
