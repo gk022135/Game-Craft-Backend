@@ -2,7 +2,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://games_user:games_pass@localhost:5434/games?schema=public"
+  url      = "postgresql://gagan:gagan@localhost:5434/games?schema=public"
 }
 
 generator client {

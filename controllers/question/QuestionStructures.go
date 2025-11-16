@@ -20,3 +20,12 @@ type QuestionResponse struct {
 	Title string `json:"Title"`
 	Description string `json:"Description"`
 }
+
+type SolutionController struct {
+	AnswerQuery  string `json:"AnswerQuery"`
+}
+
+type SolutionResponse struct {
+	IsCorrect  string `json:"IsCorrect"`
+	Message  string `json:"Message"`
+}
