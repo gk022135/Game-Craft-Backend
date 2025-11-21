@@ -52,7 +52,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(user.Id)
+	fmt.Println(user)
 
 
 	existing, err := client.User.FindFirst(
@@ -117,6 +117,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		FirstName: existing.FirstName,
 		LastName: existing.LastName,
 		Email: existing.Email,
+		Username : existing.Username,
 	}
 
 	fmt.Println(responseUserData)

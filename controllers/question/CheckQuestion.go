@@ -146,18 +146,18 @@ func CkeckQustion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responseUser, errCheckUser := helpers.RunQuery(userContainer, solution.AnswerQuery)
-	responseTest, errCheckTest := helpers.RunQuery(testingContainer, question.CorrectQuery)
+	// responseUser, errCheckUser := helpers.RunQuery(userContainer, solution.AnswerQuery)
+	// // responseTest, errCheckTest := helpers.RunQuery(testingContainer, question.CorrectQuery)
 
-	if errCheckTest != nil || errCheckUser != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(Response{
-			Message: "something error on checking",
-			Status:  false,
-		})
-		return
-	}
+	// if errCheckTest != nil || errCheckUser != nil {
+	// 	w.Header().Set("Content-Type", "application/json")
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	json.NewEncoder(w).Encode(Response{
+	// 		Message: "something error on checking",
+	// 		Status:  false,
+	// 	})
+	// 	return
+	// }
 
 
 
@@ -166,7 +166,7 @@ func CkeckQustion(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(Response{
 		Message: "questioned fetched successfully",
 		Status:  true,
-		Data:    result,
+		// Data:    result,
 	})
 
 }

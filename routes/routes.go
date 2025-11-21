@@ -15,6 +15,7 @@ func RegisterRouter(mux *http.ServeMux) {
 	mux.HandleFunc("/auth/login", auths.Login)
 	mux.HandleFunc("/save-question", question.SaveQuestion)
 	mux.HandleFunc("/add-game", sql.AddGame)
+	mux.HandleFunc("/run",question.RunQuestion)
 }
 
 // only get request are Alloweed to this Function
