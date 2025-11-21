@@ -333,3 +333,95 @@ Would you like me to also extend this README to include **how to hook this `game
  npx prisma generate --schema=prisma_games/schema.prisma
 
  
+
+
+## psql shell open
+sudo -u postgres psql
+[sudo] password for gauravkrrr: 
+psql (18.0 (Ubuntu 18.0-1.pgdg24.04+3), server 17.6 (Ubuntu 17.6-2.pgdg24.04+1))
+Type "help" for help.
+
+postgres=# psql
+postgres-# /dt
+postgres-# ;
+ERROR:  syntax error at or near "psql"
+LINE 1: psql
+        ^
+postgres=# /dt;
+ERROR:  syntax error at or near "/"
+LINE 1: /dt;
+        ^
+postgres=# dt/;
+ERROR:  syntax error at or near "dt"
+LINE 1: dt/;
+        ^
+postgres=# /c crm;
+ERROR:  syntax error at or near "/"
+LINE 1: /c crm;
+        ^
+postgres=# \dt
+            List of tables
+ Schema |   Name   | Type  |  Owner   
+--------+----------+-------+----------
+ public | students | table | postgres
+(1 row)
+
+postgres=# \c crm;
+connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "crm" does not exist
+Previous connection kept
+postgres=# \db;
+       List of tablespaces
+    Name    |  Owner   | Location 
+------------+----------+----------
+ pg_default | postgres | 
+ pg_global  | postgres | 
+(2 rows)
+
+postgres=# ALTER DATABASE mydb OWNER TO crm;
+ALTER DATABASE
+postgres=# /dt;
+ERROR:  syntax error at or near "/"
+LINE 1: /dt;
+        ^
+postgres=# \dt;
+            List of tables
+ Schema |   Name   | Type  |  Owner   
+--------+----------+-------+----------
+ public | students | table | postgres
+(1 row)
+
+postgres=# \db;
+       List of tablespaces
+    Name    |  Owner   | Location 
+------------+----------+----------
+ pg_default | postgres | 
+ pg_global  | postgres | 
+(2 rows)
+
+postgres=# \c crm;
+connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "crm" does not exist
+Previous connection kept
+postgres=# \c mydb;
+psql (18.0 (Ubuntu 18.0-1.pgdg24.04+3), server 17.6 (Ubuntu 17.6-2.pgdg24.04+1))
+You are now connected to database "mydb" as user "postgres".
+mydb=# \dt;
+               List of tables
+ Schema |        Name        | Type  | Owner 
+--------+--------------------+-------+-------
+ public | Otp                | table | crm
+ public | Question           | table | crm
+ public | User               | table | crm
+ public | _prisma_migrations | table | crm
+ public | persons            | table | crm
+(5 rows)
+
+mydb=# select * from "Question";
+ id | Title | Description | StarterSchema | StarterData | CorrectQuery 
+----+-------+-------------+---------------+-------------+--------------
+(0 rows)
+
+mydb=# select * from "persons";
+ personid | lastname | firstname | address | city 
+----------+----------+-----------+---------+------
+(0 rows)
+
