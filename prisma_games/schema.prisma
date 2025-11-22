@@ -2,7 +2,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://gagan:gagan@localhost:5434/games?schema=public"
+  url      = env("DATABASE_URL_GAMES")
 }
 
 generator client {

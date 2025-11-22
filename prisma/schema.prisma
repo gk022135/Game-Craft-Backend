@@ -36,4 +36,5 @@ model Question {
   StarterSchema String
   StarterData   String
   CorrectQuery  String
+  EndingSchema String
 }
