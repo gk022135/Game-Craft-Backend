@@ -44,7 +44,7 @@ func SaveQuestion(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-	fmt.Println("Question: ", question)
+	// fmt.Println("Question: ", question)
 
 
 
@@ -56,6 +56,7 @@ func SaveQuestion(w http.ResponseWriter, r *http.Request) {
 		db.Question.StarterSchema.Set(question.StarterSchema),
 		db.Question.StarterData.Set(question.StarterData),
 		db.Question.CorrectQuery.Set(question.CorrectQuery),
+		db.Question.EndingSchema.Set(question.EndingSchema),
 	).Exec(context.Background())
 
 	if err != nil {

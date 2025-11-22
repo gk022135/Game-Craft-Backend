@@ -5,28 +5,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
+	"gamecraft-backend/controllers/helpers"
+	"gamecraft-backend/middlewares"
 	db "gamecraft-backend/prisma/db"
+
+	"github.com/golang-jwt/jwt/v5"
 )
-
-// Define request body structure
-type QuestionRequest struct {
-	Queries []string `json:"queries"`
-	Email   string   `json:"email"`
-}
-
-type Person struct {
-    PersonID  int     `json:"personid"`
-    LastName  string  `json:"lastname"`
-    FirstName string  `json:"firstname"`
-    Address   string  `json:"address"`
-    City      string  `json:"city"`
-}
 
 // Response struct moved to QuestionStructures.go to avoid redeclaration
 
 func RunQuestion(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("RunQuestion called")
 	// Allow only POST
 	if r.Method != http.MethodPost {
 		w.Header().Set("Content-Type", "application/json")
@@ -38,7 +28,7 @@ func RunQuestion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Connect Prisma
+	// // Connect Prisma
 	client := db.NewClient()
 	if err := client.Prisma.Connect(); err != nil {
 		http.Error(w, "failed to connect to database", http.StatusInternalServerError)
@@ -46,10 +36,68 @@ func RunQuestion(w http.ResponseWriter, r *http.Request) {
 	}
 	defer client.Prisma.Disconnect()
 
-	// Decode body → Go struct
-	var questionBody QuestionRequest
 
-	if err := json.NewDecoder(r.Body).Decode(&questionBody); err != nil {
+
+	//  ////Get User
+	claims, ok := r.Context().Value(middlewares.UserKey).(jwt.MapClaims)
+    if !ok {
+        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+        return
+    }
+
+	str := fmt.Sprintf("%v", claims["user_id"])
+	num, _ := strconv.Atoi(str)
+	existing, err := client.User.FindUnique(
+		db.User.ID.Equals(num),
+	).Exec(context.Background())
+
+
+
+	if err != nil || existing == nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(Response{
+			Message: "invalid credentials",
+			Status:  false,
+		})
+		return
+	}
+
+
+	//  ////Get Question
+	id := r.URL.Query().Get("id")
+	questionId, err := strconv.Atoi(id)
+
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(Response{
+			Message: "Invalid query parameters",
+			Status: false,
+		})
+		return
+	}
+
+	question, err := client.Question.FindUnique(
+		db.Question.ID.Equals(questionId),
+	).Exec(context.Background())
+
+	if err != nil {
+		fmt.Println("Error fetching questions: ", err)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(Response{
+			Message:  "failed to fetch questions",
+			Status:   false,
+			TryLater: "please try again later",
+		})
+		return
+	}
+
+	// Decode body → Go struct
+	var solution SolutionController
+
+	if err := json.NewDecoder(r.Body).Decode(&solution); err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(Response{
@@ -60,40 +108,54 @@ func RunQuestion(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Access fields
-	queries := questionBody.Queries
-	email := questionBody.Email
+	query := solution.AnswerQuery
 
-	fmt.Println("User Email:", email)
-	fmt.Println("Queries:", queries)
+	// fmt.Println("User Email:", email)
+	fmt.Println("Query:", query)
 
 	// Execute queries using Prisma
 	// Example: Loop and run each query
-	results := []interface{}{}
 
-	for _, q := range queries {
-		people := []map[string]interface{}{}
-		err := client.Prisma.QueryRaw(q).Exec(context.Background(), &people)
-		if err != nil {
-			json.NewEncoder(w).Encode(Response{
-				Message: fmt.Sprintf("Query failed: %s", err.Error()),
-				Status:  false,
-			})
-			return
-		}
-		fmt.Println("Query Results:", people)
-		// Exec does not return query rows directly; record execution status
-		results = append(results, map[string]interface{}{
-			"query":  q,
-			"ans":    people,
-			"status": "executed",
+
+
+	testingResult, testingError := helpers.QueryRunner(question.StarterSchema, question.StarterData, question.CorrectQuery, question.EndingSchema)
+	if testingError != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(Response{
+			Message: "error in testing: " + testingResult,
+			Data: testingError,
+			Status:  false,
 		})
+		return
 	}
+
+
+
+	userResult, userError := helpers.QueryRunner(question.StarterSchema, question.StarterData, query, question.EndingSchema)
+	if userError != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(Response{
+			Message: "error in user checking: " + userResult,
+			Data: userError,
+			Status:  false,
+		})
+		return
+	}
+
+
+	fmt.Println("\n\n\n\n\n\n\n\n")
+	fmt.Println(testingResult)
+	fmt.Println("\n\n\n\n\n\n\n\n")
+	fmt.Println(userResult)
+	fmt.Println("\n\n\n\n\n\n\n\n")
+
 
 	// Send response
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(Response{
 		Message: "Queries executed successfully",
-		Data:    results,
 		Status:  true,
 	})
 }

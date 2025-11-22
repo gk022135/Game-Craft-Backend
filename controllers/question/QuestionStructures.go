@@ -6,6 +6,7 @@ type QuestionController struct {
 	StarterSchema  string `json:"StarterSchema"`
 	StarterData     string `json:"StarterData"`
 	CorrectQuery  string `json:"CorrectQuery"`
+	EndingSchema  string `json:"EndingSchema"`
 }
 
 type Response struct {
