@@ -2,11 +2,13 @@ package routes
 
 import (
 	// "fmt"
+	"encoding/json"
+	"fmt"
 	"gamecraft-backend/controllers/auths"
 	"gamecraft-backend/controllers/question"
+	"gamecraft-backend/controllers/sql"
 	"gamecraft-backend/middlewares"
 	"net/http"
-	"gamecraft-backend/controllers/sql"
 )
 
 func RegisterRouter(mux *http.ServeMux) {
@@ -26,6 +28,16 @@ func RegisterRouterGet(mux *http.ServeMux) {
 	mux.HandleFunc("/logout", auths.Logout)
 	mux.HandleFunc("/get-all-questions", question.GetAllQustion)
 	mux.HandleFunc("/get-question", question.GetQustion)
+	mux.HandleFunc("/datasharing", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.URL.Query())
+		json.NewEncoder(w).Encode(auths.Response{
+		Message: "questioned fetched successfully",
+		Status:  true,
+		Data: `{
+    "AnswerQuery": "Select * from employees where salary > 50000;"
+}`  ,
+	})
+	})
 
 	// fmt.Println("GET /getuser route registered")
 }
