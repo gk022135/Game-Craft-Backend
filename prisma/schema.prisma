@@ -38,3 +38,32 @@ model Question {
   CorrectQuery  String
   EndingSchema String
 }
+
+// //Added by Gkrrr
+model TablesInfo {
+  id          Int    @id @default(autoincrement())
+  tableName   String
+  Description String
+  querry      String
+  CreatedBy String
+  CreatedAt DateTime @default(now())
+
+  @@map("TablesInfo")
+}
+
+model QuestionRecords {
+  id              Int       @id @default(autoincrement())
+  ContributedBy   String
+  Title           String
+  Description     String
+  Topics          String[]
+  UsedTables      String[]
+  CreatedAt       DateTime  @default(now())
+  DifficultyLevel String
+  Rewards         Int?       // optional field to store reward points
+  Answer          String?    // optional field to store the answer query
+
+  @@map("QuestionRecords")
+}
+
+// Ended by Gkrrr

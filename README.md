@@ -425,3 +425,11 @@ mydb=# select * from "persons";
 ----------+----------+-----------+---------+------
 (0 rows)
 
+
+
+
+DATABASE_URL="postgresql://crm:gk022135@localhost:5432/mydb?schema=public"
+JWT_SECRET = "gauravkrrr"
+
+DATABASE_URL_TESTING="postgresql://gagan:gagan@localhost:5436/games?schema=public"
+DATABASE_URL_GAMES=""postgresql://games_user:games_pass@localhost:5434/games?schema=public"
