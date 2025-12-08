@@ -7,6 +7,7 @@ import (
 	"gamecraft-backend/controllers/auths"
 	"gamecraft-backend/controllers/question"
 	"gamecraft-backend/controllers/sql"
+	"gamecraft-backend/controllers/users"
 	"gamecraft-backend/middlewares"
 	"net/http"
 )
@@ -35,6 +36,9 @@ func RegisterRouterGet(mux *http.ServeMux) {
 	mux.HandleFunc("/get-question", question.GetQustion)
 	mux.HandleFunc("/get-question-all", question.GetAllQustion)
 	mux.HandleFunc("/get-tables-preview", question.GetTables)
+	mux.HandleFunc("/get-all-tables-preview", question.GetAllTablesPreview)
+	mux.HandleFunc("/get-questions-by-filters",question.GetQuestionsByFilters)
+	mux.HandleFunc("/get-total-solved", users.GetTotalSolved)
 
 
 

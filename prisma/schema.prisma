@@ -8,13 +8,30 @@ datasource db {
 }
 
 model User {
-  id        Int    @id @default(autoincrement())
-  FirstName String
-  LastName  String
-  Email     String @unique
-  Password  String
-  Username  String @unique
+  id            Int      @id @default(autoincrement())
+  FirstName     String
+  LastName      String
+  Email         String   @unique
+  Password      String
+  Username      String   @unique
+
+  SolvedEasy    Int[]    @default([])
+  SolvedMedium  Int[]    @default([])
+  SolvedHard    Int[]    @default([])
+
+  EarnedPoints  Int      @default(0)
+  CurrentLevel  Int      @default(1)
+  CurrentStreak Int      @default(0)
+  MaxStreak     Int      @default(0)
+
+  Links         String[] @default([]) // Use array of strings for multi key-value storage
+  PhoneNumber   String?  // optional
+
+  Badges        Int[]    @default([])
+  
+  @@map("User")
 }
+
 
 model Otp {
   id        Int      @id @default(autoincrement())
@@ -55,6 +72,7 @@ model QuestionRecords {
   id              Int       @id @default(autoincrement())
   ContributedBy   String
   Title           String
+  TitleLowerCase  String  @default("gaurav kumar")
   Description     String
   Topics          String[]
   UsedTables      String[]
