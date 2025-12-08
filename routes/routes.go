@@ -16,6 +16,7 @@ func RegisterRouter(mux *http.ServeMux) {
 	mux.HandleFunc("/auth/verify-otp", auths.VerifyOtp)
 	mux.HandleFunc("/auth/login", auths.Login)
 	mux.HandleFunc("/save-question", question.SaveQuestion)
+	mux.HandleFunc("/check-question", question.CheckQustion)
 	mux.HandleFunc("/add-game", sql.AddGame)
 	mux.HandleFunc("/run",middlewares.AuthMiddleware(question.RunQuestion))
 
