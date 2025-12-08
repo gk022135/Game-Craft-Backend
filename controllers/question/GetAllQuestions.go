@@ -35,9 +35,9 @@ func GetAllQustion(w http.ResponseWriter, r *http.Request) {
 
 
 
-	questions, err := client.Question.FindMany().
+	questions, err := client.QuestionRecords.FindMany().
 		OrderBy(
-			db.Question.ID.Order(db.SortOrderAsc),
+			db.QuestionRecords.ID.Order(db.SortOrderAsc),
 		).
 		Exec(context.Background())
 

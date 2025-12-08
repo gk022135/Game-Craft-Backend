@@ -70,8 +70,9 @@ func GetTables(w http.ResponseWriter, r *http.Request) {
 		if table == "" {
 			continue
 		}
+		// fmt.Print("hi ", table)
 
-		query := fmt.Sprintf("SELECT * FROM `%s` LIMIT 5;", table)
+		query := fmt.Sprintf("SELECT * FROM %s LIMIT 5;", table)
 
 		var result []map[string]interface{}
 
