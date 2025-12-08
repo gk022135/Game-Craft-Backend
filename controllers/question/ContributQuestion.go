@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	db "gamecraft-backend/prisma/db"
 )
@@ -76,7 +77,6 @@ func ContributeQuestion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer client.Prisma.Disconnect()
-
 	//-------Inserting contribut question into database-------//
 	ctx := context.Background()
 	_, err := client.QuestionRecords.CreateOne(
@@ -88,6 +88,7 @@ func ContributeQuestion(w http.ResponseWriter, r *http.Request) {
 		db.QuestionRecords.Topics.Set(Topics),
 		db.QuestionRecords.Rewards.Set(Rewards),
 		db.QuestionRecords.Answer.Set(Answer),
+		db.QuestionRecords.TitleLowerCase.Set(strings.ToLower(Title)),
 	).Exec(ctx) // FIXED missing Exec()
 
 	if err != nil {

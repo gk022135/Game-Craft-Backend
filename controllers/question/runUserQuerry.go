@@ -15,12 +15,12 @@ if both results are different then we have to return failure response with corre
 -----------------------------------------------------------
 */
 
-
 package question
 
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"reflect"
 
@@ -30,23 +30,23 @@ import (
 
 /* ---------- REQUEST PAYLOAD ---------- */
 type UserQuestionPayload struct {
-	QuestionID   int    `json:"question_id"`
-	Title        string `json:"title"`
-	UserQuery    string `json:"user_query"`
+	QuestionID int    `json:"question_id"`
+	Title      string `json:"title"`
+	UserQuery  string `json:"user_query"`
 	// Optional: UserID if needed
 }
 
 /* ---------- RESPONSE ---------- */
 type QuestionCheckResponse struct {
-	Message      string      `json:"message"`
-	Status       bool        `json:"status"`
-	UserResult   interface{} `json:"user_result,omitempty"`
+	Message       string      `json:"message"`
+	Status        bool        `json:"status"`
+	UserResult    interface{} `json:"user_result,omitempty"`
 	CorrectResult interface{} `json:"correct_result,omitempty"`
 }
 
 func CheckUserAnswer(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
+	fmt.Println("check user answer called")
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		json.NewEncoder(w).Encode(QuestionCheckResponse{
@@ -57,8 +57,10 @@ func CheckUserAnswer(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Decode user payload
+	fmt.Println(r.Body)
 	var payload UserQuestionPayload
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(QuestionCheckResponse{
 			Message: "Invalid request body",
@@ -67,20 +69,22 @@ func CheckUserAnswer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println("front pay", payload)
+
 	/*
-	User Payload Have
-	 1. question title and id and user answer query ----> from Tales_Info table in Main Database
-	 2. by question id and title we can find the question and used tables for tthis question
-	 3. also get the correct annswer from main database
+		User Payload Have
+		 1. question title and id and user answer query ----> from Tales_Info table in Main Database
+		 2. by question id and title we can find the question and used tables for tthis question
+		 3. also get the correct annswer from main database
 
-	 ----- Here all need of question done -----
-	===========================================
-	-------We Have to Run the user Query and Correct Answer Query-------
+		 ----- Here all need of question done -----
+		===========================================
+		-------We Have to Run the user Query and Correct Answer Query-------
 
-	after runing the both query we have to compare the results
-	if both results are same then we have to return success response
-	if both results are different then we have to return failure response with correct answer
-	-----------------------------------------------------------
+		after runing the both query we have to compare the results
+		if both results are same then we have to return success response
+		if both results are different then we have to return failure response with correct answer
+		-----------------------------------------------------------
 	*/
 
 	// 1. Connect to main database to fetch question info
