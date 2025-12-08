@@ -71,13 +71,13 @@ const (
 )
 
 // --- template client.gotpl ---
-const datasources = `[{"name":"db","provider":"postgresql","activeProvider":"postgresql","url":{"fromEnvVar":"","value":"postgresql://games_user:games_pass@localhost:5434/games?schema=public"},"config":null}]`
+const datasources = `[{"name":"db","provider":"postgresql","activeProvider":"postgresql","url":{"fromEnvVar":"DATABASE_URL_GAMES","value":""},"config":null}]`
 
 const schema = `// prisma_games/schema.prisma
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://games_user:games_pass@localhost:5434/games?schema=public"
+  url      = env("DATABASE_URL_GAMES")
 }
 
 generator client {
@@ -95,8 +95,8 @@ model Game {
   updatedAt   DateTime @updatedAt
 }
 `
-const schemaDatasourceURL = "postgresql://games_user:games_pass@localhost:5434/games?schema=public"
-const schemaEnvVarName = ""
+const schemaDatasourceURL = ""
+const schemaEnvVarName = "DATABASE_URL_GAMES"
 
 // hasBinaryTargets is true when binaryTargets are provided on generation time
 var hasBinaryTargets = true
