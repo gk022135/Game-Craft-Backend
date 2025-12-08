@@ -9,20 +9,19 @@ import (
 	"strings"
 
 	"gamecraft-backend/controllers/helpers"
+	"gamecraft-backend/middlewares"
+
 	// "gamecraft-backend/middlewares"
 	db "gamecraft-backend/prisma/db"
 
+	"github.com/golang-jwt/jwt/v5"
 	// "github.com/golang-jwt/jwt/v5"
 )
 
-<<<<<<< Updated upstream:controllers/question/runQuestion.go
 // Response struct moved to QuestionStructures.go to avoid redeclaration
 
 func RunQuestion(w http.ResponseWriter, r *http.Request) {
 	// Allow only POST
-=======
-func CheckQustion(w http.ResponseWriter, r *http.Request) {
->>>>>>> Stashed changes:controllers/question/CheckQuestion.go
 	if r.Method != http.MethodPost {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
@@ -32,13 +31,8 @@ func CheckQustion(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-<<<<<<< Updated upstream:controllers/question/runQuestion.go
 	
 	// // Connect Prisma
-=======
-
-
->>>>>>> Stashed changes:controllers/question/CheckQuestion.go
 	client := db.NewClient()
 	if err := client.Prisma.Connect(); err != nil {
 		http.Error(w, "failed to connect to database", http.StatusInternalServerError)
@@ -126,7 +120,6 @@ func CheckQustion(w http.ResponseWriter, r *http.Request) {
 	// Execute queries using Prisma
 	// Example: Loop and run each query
 
-<<<<<<< Updated upstream:controllers/question/runQuestion.go
 	if strings.TrimSpace(query) == "" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
@@ -169,35 +162,9 @@ func CheckQustion(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-=======
-	// claims, ok := r.Context().Value(middlewares.UserKey).(jwt.MapClaims)
-    // if !ok {
-    //     http.Error(w, "Unauthorized", http.StatusUnauthorized)
-    //     return
-    // }
-
-	// str := fmt.Sprintf("%v", claims["user_id"])
-	// num, _ := strconv.Atoi(str)
-	// existing, err := client.User.FindUnique(
-	// 	db.User.ID.Equals(num),
-	// ).Exec(context.Background())
-
-
-
-	// if err != nil || existing == nil {
-	// 	w.Header().Set("Content-Type", "application/json")
-	// 	w.WriteHeader(http.StatusUnauthorized)
-	// 	json.NewEncoder(w).Encode(Response{
-	// 		Message: "invalid credentials",
-	// 		Status:  false,
-	// 	})
-	// 	return
-	// }
->>>>>>> Stashed changes:controllers/question/CheckQuestion.go
 
 	isCorrect := helpers.CompareResults(testingResult, userResult, false)
 
-<<<<<<< Updated upstream:controllers/question/runQuestion.go
 	fmt.Println("\n\n\n\n\n\n\n\n")
 	fmt.Println(testingResult)
 	fmt.Println("\n\n\n\n\n\n\n\n")
@@ -215,78 +182,11 @@ func CheckQustion(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Send response
-=======
-	userContainer, errUser := helpers.CreateMySQLContainer("username")
-	testingContainer, errTest := helpers.CreateMySQLContainer("email")
-	
-	defer helpers.DeleteContainer(userContainer)
-	defer helpers.DeleteContainer(testingContainer)
-
-	if errTest != nil || errUser != nil {
-		fmt.Println("Error creating user container: ", errUser)
-		fmt.Println("Error creating test container: ", errTest)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(Response{
-			Message:  "failed to create contailer",
-			Status:   false,
-			TryLater: "please try again later",
-		})
-		return
-	}
-
-	_, errDecUser := helpers.RunQuery(userContainer, question.StarterSchema)
-	_, errDefUser := helpers.RunQuery(userContainer, question.StarterData)
-
-	if errDecUser != nil || errDefUser != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(Response{
-			Message: "something error on user checking",
-			Status:  false,
-		})
-		return
-	}
-
-	_, errDecTest := helpers.RunQuery(testingContainer, question.StarterSchema)
-	_, errDefTest := helpers.RunQuery(testingContainer, question.StarterData)
-
-	if errDecTest != nil || errDefTest != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(Response{
-			Message: "something error on testing checking",
-			Status:  false,
-		})
-		return
-	}
-
-	responseUser, errCheckUser := helpers.RunQuery(userContainer, solution.AnswerQuery)
-	responseTest, errCheckTest := helpers.RunQuery(testingContainer, question.CorrectQuery)
-
-	if errCheckTest != nil || errCheckUser != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(Response{
-			Message: "something error on checking",
-			Status:  false,
-		})
-		return
-	}
-
-	fmt.Println(responseUser)
-	fmt.Println(responseTest)
-
->>>>>>> Stashed changes:controllers/question/CheckQuestion.go
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(Response{
 		Message: "Queries executed successfully",
 		Status:  true,
-<<<<<<< Updated upstream:controllers/question/runQuestion.go
 		Result: isCorrect,
 		Data: dt,
-=======
-		Data:    "",
->>>>>>> Stashed changes:controllers/question/CheckQuestion.go
 	})
 }
