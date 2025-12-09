@@ -17,6 +17,7 @@ type TotalSolvedResponse struct {
 	TotalAvailableEasy   int    `json:"total_available_easy"`
 	TotalAvailableMedium int    `json:"total_available_medium"`
 	TotalAvailableHard   int    `json:"total_available_hard"`
+	PointsEarned         int    `json:"points_earned"`
 }
 
 type Response struct {
@@ -106,21 +107,21 @@ func GetTotalSolved(w http.ResponseWriter, r *http.Request) {
 		TotalAvailableHard = len(hardRecords)
 	}
 
+	earnedPoints := user.EarnedPoints
+
 	// Count the solved questions
 	totalEasy := len(user.SolvedEasy)
 	totalMedium := len(user.SolvedMedium)
-	totalHard := len(user.SolvedHard)
-
-
 	result := TotalSolvedResponse{
 		Email:                user.Email,
 		TotalEasySolved:      totalEasy,
 		TotalMediumSolved:    totalMedium,
-		TotalHardSolved:      totalHard,
 		TotalAvailableEasy:   TotalAvailableEasy,
 		TotalAvailableMedium: TotalAvailableMedium,
 		TotalAvailableHard:   TotalAvailableHard,
+		PointsEarned:         earnedPoints,
 	}
+	
 
 	// Send response
 	w.WriteHeader(http.StatusOK)

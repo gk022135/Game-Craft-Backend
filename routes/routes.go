@@ -19,11 +19,13 @@ func RegisterRouter(mux *http.ServeMux) {
 	mux.HandleFunc("/save-question", question.SaveQuestion)
 	mux.HandleFunc("/check-question", question.CheckQustion)
 	mux.HandleFunc("/add-game", sql.AddGame)
-	mux.HandleFunc("/run",middlewares.AuthMiddleware(question.RunQuestion))
+	mux.HandleFunc("/run", middlewares.AuthMiddleware(question.RunQuestion))
 
 	mux.HandleFunc("/create-table", question.CreateQuestionTable)
 	mux.HandleFunc("/contribute-question", question.ContributeQuestion)
 	mux.HandleFunc("/run-query", question.CheckUserAnswer)
+	mux.HandleFunc("/update-question-solved-status", question.UpdateQuestionSolvedStatus)
+	mux.HandleFunc("/update-user-profile", users.UpdateUserProfile)
 }
 
 // only get request are Alloweed to this Function
@@ -37,21 +39,19 @@ func RegisterRouterGet(mux *http.ServeMux) {
 	mux.HandleFunc("/get-question-all", question.GetAllQustion)
 	mux.HandleFunc("/get-tables-preview", question.GetTables)
 	mux.HandleFunc("/get-all-tables-preview", question.GetAllTablesPreview)
-	mux.HandleFunc("/get-questions-by-filters",question.GetQuestionsByFilters)
+	mux.HandleFunc("/get-questions-by-filters", question.GetQuestionsByFilters)
 	mux.HandleFunc("/get-total-solved", users.GetTotalSolved)
-
-
-
+	mux.HandleFunc("/get-user-profile", users.GetUserProfile)
 
 	mux.HandleFunc("/datasharing", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.URL.Query())
 		json.NewEncoder(w).Encode(auths.Response{
-		Message: "questioned fetched successfully",
-		Status:  true,
-		Data: `{
+			Message: "questioned fetched successfully",
+			Status:  true,
+			Data: `{
     "AnswerQuery": "Select * from employees where salary > 50000;"
-}`  ,
-	})
+}`,
+		})
 	})
 
 	// fmt.Println("GET /getuser route registered")

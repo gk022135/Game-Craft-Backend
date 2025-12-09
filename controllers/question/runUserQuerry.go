@@ -170,6 +170,10 @@ func CheckUserAnswer(w http.ResponseWriter, r *http.Request) {
 
 	// 5. Compare results
 	if reflect.DeepEqual(userResult, correctResult) {
+		//Here u can make the question Status to completed for the user if needed
+		//also update the user score if needed
+
+		// Results match
 		json.NewEncoder(w).Encode(QuestionCheckResponse{
 			Message:       "Correct! Your answer matches the expected result.",
 			Status:        true,
