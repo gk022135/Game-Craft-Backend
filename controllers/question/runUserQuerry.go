@@ -21,11 +21,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"gamecraft-backend/middlewares"
 	"net/http"
 	"reflect"
+	"strconv"
 
 	db "gamecraft-backend/prisma/db"
 	db2 "gamecraft-backend/prisma_games/prisma_games_client"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 /* ---------- REQUEST PAYLOAD ---------- */
@@ -72,19 +76,19 @@ func CheckUserAnswer(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("front pay", payload)
 
 	/*
-		User Payload Have
-		 1. question title and id and user answer query ----> from Tales_Info table in Main Database
-		 2. by question id and title we can find the question and used tables for tthis question
-		 3. also get the correct annswer from main database
+				User Payload Have
+				 1. question title and id and user answer query ----> from Tales_Info table in Main Database
+				 2. by question id and title we can find the question and used tables for tthis question
+				 3. also get the correct annswer from main database
 
-		 ----- Here all need of question done -----
-		===========================================
-		-------We Have to Run the user Query and Correct Answer Query-------
-
-		after runing the both query we have to compare the results
-		if both results are same then we have to return success response
-		if both results are different then we have to return failure response with correct answer
-		-----------------------------------------------------------
+				 ----- Here all need of question done -----
+				===========================================
+				-------We Have to Run the user Query and Correct Answer Query-------
+		controllers/question/runQuestion.go
+				after runing the both query we have to compare the results
+				if both results are same then we have to return success response
+				if both results are different then we have to return failure response with correct answer
+				-----------------------------------------------------------
 	*/
 
 	// 1. Connect to main database to fetch question info
@@ -100,6 +104,30 @@ func CheckUserAnswer(w http.ResponseWriter, r *http.Request) {
 	defer clientMain.Prisma.Disconnect()
 
 	ctx := context.Background()
+
+	//find the user id  from User
+	//  ////Get User
+	claims, ok := r.Context().Value(middlewares.UserKey).(jwt.MapClaims)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	str := fmt.Sprintf("%v", claims["user_id"])
+	num, _ := strconv.Atoi(str)
+	existing, err := clientMain.User.FindUnique(
+		db.User.ID.Equals(num),
+	).Exec(context.Background())
+
+	if err != nil || existing == nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(Response{
+			Message: "invalid credentials",
+			Status:  false,
+		})
+		return
+	}
 
 	// Fetch question by ID
 	questionRecord, err := clientMain.QuestionRecords.FindUnique(
@@ -174,6 +202,7 @@ func CheckUserAnswer(w http.ResponseWriter, r *http.Request) {
 		//also update the user score if needed
 
 		// Results match
+		// helpers.UpdateRecentActivity(num, payload.QuestionID, payload.UserQuery, true)
 		json.NewEncoder(w).Encode(QuestionCheckResponse{
 			Message:       "Correct! Your answer matches the expected result.",
 			Status:        true,
@@ -181,6 +210,8 @@ func CheckUserAnswer(w http.ResponseWriter, r *http.Request) {
 			CorrectResult: correctResult,
 		})
 	} else {
+		// helpers.UserActivity(num, payload.QuestionID, payload.UserQuery, false)
+
 		json.NewEncoder(w).Encode(QuestionCheckResponse{
 			Message:       "Incorrect. Your answer does not match the expected result.",
 			Status:        false,

@@ -14,15 +14,15 @@ import (
 /* ---------- RESPONSE STRUCT ---------- */
 
 type FilteredQuestionResponse struct {
-	Id              int      `json:"Id"`
-	Title           string   `json:"Title"`
-	Description     string   `json:"Description"`
-	Topics          []string `json:"Topics"`
-	UsedTables      []string `json:"UsedTables"`
-	ContributedBy   string   `json:"ContributedBy"`
-	Points          int      `json:"Points,omitempty"`
-	Answer          string   `json:"Answer,omitempty"`
-	DifficultyLevel string   `json:"DifficultyLevel"`
+	Id              int      `json:"id"`
+	Title           string   `json:"title"`
+	Description     string   `json:"description"`
+	Topics          []string `json:"topics"`
+	UsedTables      []string `json:"usedTables"`
+	ContributedBy   string   `json:"contributedBy"`
+	Points          int      `json:"points,omitempty"`
+	Answer          string   `json:"answer,omitempty"`
+	DifficultyLevel string   `json:"difficultyLevel"`
 }
 
 /* ---------- HANDLER ---------- */

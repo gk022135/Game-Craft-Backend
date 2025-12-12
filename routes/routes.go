@@ -23,7 +23,7 @@ func RegisterRouter(mux *http.ServeMux) {
 
 	mux.HandleFunc("/create-table", question.CreateQuestionTable)
 	mux.HandleFunc("/contribute-question", question.ContributeQuestion)
-	mux.HandleFunc("/run-query", question.CheckUserAnswer)
+	mux.HandleFunc("/run-query", middlewares.AuthMiddleware(question.CheckUserAnswer))
 	mux.HandleFunc("/update-question-solved-status", question.UpdateQuestionSolvedStatus)
 	mux.HandleFunc("/update-user-profile", users.UpdateUserProfile)
 }
@@ -42,6 +42,7 @@ func RegisterRouterGet(mux *http.ServeMux) {
 	mux.HandleFunc("/get-questions-by-filters", question.GetQuestionsByFilters)
 	mux.HandleFunc("/get-total-solved", users.GetTotalSolved)
 	mux.HandleFunc("/get-user-profile", users.GetUserProfile)
+	mux.HandleFunc("/getuser-activity", users.GetUserActivity)
 
 	mux.HandleFunc("/datasharing", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.URL.Query())
@@ -49,7 +50,8 @@ func RegisterRouterGet(mux *http.ServeMux) {
 			Message: "questioned fetched successfully",
 			Status:  true,
 			Data: `{
-    "AnswerQuery": "Select * from employees where salary > 50000;"
+    "open -na "Google Chrome" --args --disable-web-security --user-data-dir="/tmp/chrome"
+"
 }`,
 		})
 	})

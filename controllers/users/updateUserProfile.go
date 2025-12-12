@@ -20,11 +20,6 @@ type UpdateUserProfilePayload struct {
 }
 
 /** ---------- RESPONSE STRUCT ---------- */
-type Response struct {
-	Status  bool        `json:"status"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data,omitempty"`
-}
 
 /** ---------- HANDLER ---------- */
 func UpdateUserProfile(w http.ResponseWriter, r *http.Request) {

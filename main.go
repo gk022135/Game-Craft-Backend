@@ -13,35 +13,31 @@ import (
 // CORS Middleware
 func enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
 		origin := r.Header.Get("Origin")
+		log.Println("Origin:", origin)
 
-		allowed := map[string]bool{
-			"http://localhost:3000":     true,
-			"http://172.18.126.70:3000": true,
-		}
-
-		if allowed[origin] {
-			// IMPORTANT: set exact origin (not "*") when credentials are used
+		// ✅ Chrome requires exact origin OR dynamic echo
+		if origin != "" {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Access-Control-Allow-Credentials", "true")
-			// Optional but good: tell caches that response varies by Origin
 			w.Header().Set("Vary", "Origin")
 		}
 
-		// Allow needed methods and headers for preflight and actual requests
+		// ✅ MUST be set before OPTIONS response
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
-		// If your client sends custom headers, add them above
 
-		// Handle preflight
+		// ✅ Handle preflight
 		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusOK)
+			w.WriteHeader(http.StatusNoContent) // 204
 			return
 		}
 
 		next.ServeHTTP(w, r)
 	})
 }
+
 
 func main() {
 	apiMux := http.NewServeMux()

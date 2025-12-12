@@ -332,6 +332,11 @@ Would you like me to also extend this README to include **how to hook this `game
  ```bash
  npx prisma generate --schema=prisma_games/schema.prisma
 
+
+ npx prisma migrate dev --schema=prisma/schema.prisma --name init
+  npx prisma generate --schema=prisma/schema.prisma
+
+
  
 
 

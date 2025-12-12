@@ -54,12 +54,28 @@ func GetAllQustion(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Map into a lightweight DTO
+	type QuestionResponse struct{
+		Id          int    `json:"id"`
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		Answer      string `json:"answer"`
+	}
 	var result []QuestionResponse
 	for _, q := range questions {
+		// Answer is an accessor function that returns (db.String, bool)
+		// so call it, check ok, and convert to a plain string.
+		var answer string
+		if v, ok := q.Answer(); ok {
+			answer = string(v)
+		} else {
+			answer = "No answer provided"
+		}
+
 		result = append(result, QuestionResponse{
 			Id:          q.ID,
 			Title:       q.Title,
 			Description: q.Description,
+			Answer:      answer,
 		})
 	}
 

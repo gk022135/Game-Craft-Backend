@@ -24,14 +24,15 @@ model User {
   CurrentStreak Int      @default(0)
   MaxStreak     Int      @default(0)
 
-  Links         String[] @default([]) // Use array of strings for multi key-value storage
-  PhoneNumber   String?  // optional
+  Links         String[] @default([])
+  PhoneNumber   String?
 
   Badges        Int[]    @default([])
-  
+
+  userActivityLogs UserActivityLog[]
+
   @@map("User")
 }
-
 
 model Otp {
   id        Int      @id @default(autoincrement())
@@ -53,35 +54,48 @@ model Question {
   StarterSchema String
   StarterData   String
   CorrectQuery  String
-  EndingSchema String
+  EndingSchema  String
 }
 
-// //Added by Gkrrr
 model TablesInfo {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   tableName   String
   Description String
   querry      String
-  CreatedBy String
-  CreatedAt DateTime @default(now())
+  CreatedBy   String
+  CreatedAt   DateTime @default(now())
 
   @@map("TablesInfo")
 }
 
 model QuestionRecords {
-  id              Int       @id @default(autoincrement())
-  ContributedBy   String
-  Title           String
-  TitleLowerCase  String  @default("gaurav kumar")
-  Description     String
-  Topics          String[]
-  UsedTables      String[]
-  CreatedAt       DateTime  @default(now())
-  DifficultyLevel String
-  Rewards         Int?       // optional field to store reward points
-  Answer          String?    // optional field to store the answer query
+  id               Int               @id @default(autoincrement())
+  ContributedBy    String
+  Title            String
+  TitleLowerCase   String            @default("gaurav kumar")
+  Description      String
+  Topics           String[]
+  UsedTables       String[]
+  CreatedAt        DateTime          @default(now())
+  DifficultyLevel  String
+  Rewards          Int?
+  Answer           String?
+
+  userActivityLogs UserActivityLog[]
 
   @@map("QuestionRecords")
 }
 
-// Ended by Gkrrr
+model UserActivityLog {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  questionId Int
+  timestamp  DateTime @default(now())
+  solution   String
+  isValid    Boolean  @default(false)
+
+  user       User             @relation(fields: [userId], references: [id])
+  question   QuestionRecords  @relation(fields: [questionId], references: [id])
+
+  @@map("UserActivityLog")
+}
