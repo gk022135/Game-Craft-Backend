@@ -17,18 +17,18 @@ func enableCORS(next http.Handler) http.Handler {
 		origin := r.Header.Get("Origin")
 		log.Println("Origin:", origin)
 
-		// ✅ Chrome requires exact origin OR dynamic echo
+		// Chrome requires exact origin OR dynamic echo
 		if origin != "" {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Access-Control-Allow-Credentials", "true")
 			w.Header().Set("Vary", "Origin")
 		}
 
-		// ✅ MUST be set before OPTIONS response
+		// MUST be set before OPTIONS response
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
 
-		// ✅ Handle preflight
+		// Handle preflight
 		if r.Method == http.MethodOptions {
 			w.WriteHeader(http.StatusNoContent) // 204
 			return
@@ -51,7 +51,7 @@ func main() {
 	http.Handle("/getapis/", enableCORS(http.StripPrefix("/getapis", getMux)))
 
 	if err := godotenv.Load(); err != nil {
-		log.Println("⚠️  No .env file found, using system environment variables")
+		log.Println(" No .env file found, using system environment variables")
 	}
 
 	if os.Getenv("DATABASE_URL") == "" {

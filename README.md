@@ -1,3 +1,192 @@
+Here’s a **clean, professional, and polished version** of your `README.md`.
+I fixed grammar, structure, clarity, and made it developer-friendly while keeping your original intent and content intact.
+
+---
+
+# Game Craft — Learn SQL Through Gameplay
+
+## Overview
+
+**Game Craft** is an interactive learning game designed to help users **learn SQL by playing**.
+Instead of passively reading tutorials, users solve SQL-based challenges inside a game environment.
+
+### Tech Stack
+
+**Backend**
+
+* **Golang**
+* **PostgreSQL**
+* **Prisma ORM**
+* **Docker**
+* **Air** (for live reload)
+
+**Frontend**
+
+* **Next.js**
+* **TypeScript**
+* **React.js**
+* **Tailwind CSS**
+* **Fetch & Axios** for API calls
+
+---
+
+## How the Backend Works
+
+* The backend is written in **Go (Golang)**.
+* It uses **two PostgreSQL database instances**:
+
+  1. **Main Database (`maindb`)**
+
+     * Stores user data
+     * User stats
+     * Question records
+     * Table metadata
+  2. **Game Database (`games_db`)**
+
+     * Stores game-related tables
+     * Executes SQL queries submitted by users for challenges
+
+### Database Communication
+
+* **Prisma ORM** is used to interact with PostgreSQL.
+* Prisma Client is generated using `npx` and used within the Go backend for database operations.
+
+---
+
+## Running the Project
+
+## Option 1: Run Databases Using Docker (Recommended)
+
+### Prerequisites
+
+* Go installed
+* Docker installed
+* Air installed globally
+
+```bash
+go install github.com/cosmtrek/air@latest
+```
+
+### Steps
+
+1. Install Go dependencies:
+
+   ```bash
+   go mod tidy
+   ```
+
+2. Pull PostgreSQL Docker image:
+
+   ```bash
+   docker pull postgres
+   ```
+
+3. Create the **main database container**:
+
+   * Map port `5432`
+   * Name the container `maindb`
+   * Create a database (e.g., `mydb`)
+   * Update the database URL in `.env`
+
+4. Create the **game database container**:
+
+   * Name the container `games_db`
+   * Repeat the same setup steps as above
+
+5. Start the backend:
+
+   ```bash
+   air
+   ```
+
+⚠️ Make sure **Air** is installed globally before running the command.
+
+---
+
+## Option 2: Use an Online PostgreSQL Instance (No Docker)
+
+* Create a free PostgreSQL instance using **Supabase**
+* Copy the database connection URL
+* Paste it into the `.env` file
+
+![Supabase Setup](image.png)
+
+Start the backend:
+
+```bash
+air
+```
+
+Backend runs on **[http://localhost:3001](http://localhost:3001)**
+
+---
+
+## API Routes
+
+* All backend routes are defined in `routes.go`
+* Use **Postman** or any API client to test endpoints
+* Pick the corresponding route based on your requirement
+
+---
+
+## Running the Frontend (Next.js)
+
+The frontend setup is simple.
+
+### Steps
+
+```bash
+npm install
+npm run dev
+```
+
+Frontend will start on **[http://localhost:3000](http://localhost:3000)**
+
+---
+
+## Authentication Flow
+
+### Login / Signup Page
+
+![Login Page](image-2.png)
+
+* First-time users must **sign up**
+* An **OTP is sent to your email**
+* Use a valid email address
+
+### OTP Verification
+
+![OTP Email](image-3.png)
+
+---
+
+## Main Landing Page
+
+![Landing Page](image-1.png)
+
+---
+
+## Game Screens
+
+![Game Screen](image-4.png)
+![Game Screen](image-5.png)
+![Game Screen](image-6.png)
+![Game Screen](image-7.png)
+![Game Screen](image-8.png)
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
 ```markdown
 # GameCraft-backend: Working on Collaboration
 ### Gaurav started working here
