@@ -19,7 +19,7 @@ func RegisterRouter(mux *http.ServeMux) {
 	mux.HandleFunc("/save-question", question.SaveQuestion)
 	mux.HandleFunc("/check-question", question.CheckQustion)
 	mux.HandleFunc("/add-game", sql.AddGame)
-	mux.HandleFunc("/run", middlewares.AuthMiddleware(question.RunQuestion))
+	// mux.HandleFunc("/run", middlewares.AuthMiddleware(question.RunQuestion))
 
 	mux.HandleFunc("/create-table", question.CreateQuestionTable)
 	mux.HandleFunc("/contribute-question", question.ContributeQuestion)
