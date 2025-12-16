@@ -2,7 +2,8 @@ package helpers
 
 import (
 	"context"
-	db "gamecraft-backend/prisma/db"
+
+	db "github.com/gk022135/Game-Craft-Backend/prisma/db"
 )
 
 func UserActivity(userId int, questionID int, userQuery string, isValid bool) error {
@@ -22,7 +23,6 @@ func UserActivity(userId int, questionID int, userQuery string, isValid bool) er
 		db.UserActivityLog.Question.Link(
 			db.QuestionRecords.ID.Equals(questionID),
 		),
-		
 		db.UserActivityLog.IsValid.Set(isValid),
 	).Exec(ctx)
 
