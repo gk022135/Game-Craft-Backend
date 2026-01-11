@@ -178,7 +178,7 @@ Frontend will start on **[http://localhost:3000](http://localhost:3000)**
 
 
 
-```markdown
+
 # GameCraft-backend: Working on Collaboration
 ### Gaurav started working here
 
@@ -193,7 +193,7 @@ This document explains how to add a **new Postgres database for games** inside D
 
 ## Project Structure
 
-```
+
 backend/
 ├── prisma/                 # existing main Prisma setup (main DB)
 ├── prisma\_games/           # NEW Prisma setup for games\_db
@@ -201,7 +201,6 @@ backend/
 ├── docker-compose.yml      # docker setup for new Postgres
 ├── go.mod / go.sum         # Go modules
 
-````
 
 ---
 ## Step 1: Docker Setup for Postgres
@@ -239,7 +238,6 @@ Verify the container is running:
 docker ps
 ```
 
----
 
 ## Step 2: Prisma Schema for New Database
 
@@ -267,7 +265,6 @@ model Game {
 }
 ```
 
----
 
 ## Step 3: Apply the Migration
 
@@ -277,7 +274,6 @@ Run from the `backend/` directory:
 npx prisma migrate dev --schema=prisma_games/schema.prisma --name init
 ```
 
----
 
 ## Step 4: Install Prisma Go Client
 
