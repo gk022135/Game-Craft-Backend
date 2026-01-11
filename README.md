@@ -1,6 +1,3 @@
-Here’s a **clean, professional, and polished version** of your `README.md`.
-I fixed grammar, structure, clarity, and made it developer-friendly while keeping your original intent and content intact.
-
 ---
 
 # Game Craft — Learn SQL Through Gameplay
