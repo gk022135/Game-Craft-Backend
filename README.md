@@ -180,13 +180,9 @@ Frontend will start on **[http://localhost:3000](http://localhost:3000)**
 
 
 # GameCraft-backend: Working on Collaboration
-### Gaurav started working here
-
-
-# Never Forget to change directory according to cd prisma_games or prisma(stay in root)
+### Never Forget to change directory according to cd prisma_games or prisma(stay in root)
 
 ## Setup of a New Database Without Affecting the Previous One (runs in Docker)
-
 This document explains how to add a **new Postgres database for games** inside Docker without affecting the existing **main Postgres + Prisma setup**.
 
 ---
@@ -195,11 +191,11 @@ This document explains how to add a **new Postgres database for games** inside D
 
 
 backend/
-├── prisma/                 # existing main Prisma setup (main DB)
-├── prisma\_games/           # NEW Prisma setup for games\_db
-│    └── schema.prisma
-├── docker-compose.yml      # docker setup for new Postgres
-├── go.mod / go.sum         # Go modules
+├── prisma/                 # existing main Prisma setup (main DB)  
+├── prisma\_games/           # NEW Prisma setup for games\_db  
+│    └── schema.prisma  
+├── docker-compose.yml      # docker setup for new Postgres  
+├── go.mod / go.sum         # Go modules  
 
 
 ---
