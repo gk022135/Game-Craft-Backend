@@ -1,5 +1,3 @@
----
-
 # Game Craft — Learn SQL Through Gameplay
 
 ## Overview
@@ -25,8 +23,6 @@ Instead of passively reading tutorials, users solve SQL-based challenges inside 
 * **Tailwind CSS**
 * **Fetch & Axios** for API calls
 
----
-
 ## How the Backend Works
 
 * The backend is written in **Go (Golang)**.
@@ -48,7 +44,6 @@ Instead of passively reading tutorials, users solve SQL-based challenges inside 
 * **Prisma ORM** is used to interact with PostgreSQL.
 * Prisma Client is generated using `npx` and used within the Go backend for database operations.
 
----
 
 ## Running the Project
 
@@ -95,8 +90,7 @@ go install github.com/cosmtrek/air@latest
    ```bash
    air
    ```
-
-⚠️ Make sure **Air** is installed globally before running the command.
+ Make sure **Air** is installed globally before running the command.
 
 ---
 
